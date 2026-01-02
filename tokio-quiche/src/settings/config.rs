@@ -230,10 +230,12 @@ fn quiche_config_with_tls(
             let raw_public_key = read_file(tls.cert)?;
             ssl_ctx_builder.set_rpk_certificate(&raw_public_key)?;
 
-            let raw_private_key = read_file(tls.private_key)?;
-            let pkey =
-                boring::pkey::PKey::private_key_from_pem(&raw_private_key)?;
-            ssl_ctx_builder.set_null_chain_private_key(&pkey)?;
+            if let Some(pkey_path) = tls.private_key {
+                let raw_private_key = read_file(pkey_path)?;
+                let pkey =
+                    boring::pkey::PKey::private_key_from_pem(&raw_private_key)?;
+                ssl_ctx_builder.set_null_chain_private_key(&pkey)?;
+            }
 
             Ok(quiche::Config::with_boring_ssl_ctx_builder(
                 quiche::PROTOCOL_VERSION,

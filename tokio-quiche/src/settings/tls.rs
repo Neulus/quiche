@@ -30,7 +30,7 @@ pub struct TlsCertificatePaths<'p> {
     /// Path to the endpoint's TLS certificate.
     pub cert: &'p str,
     /// Path to the endpoint's private key.
-    pub private_key: &'p str,
+    pub private_key: Option<&'p str>,
     /// `cert`'s PKI certificate type.
     pub kind: CertificateKind,
 }
